@@ -44,31 +44,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
 
-    // 4. Logika Salin untuk BANYAK No. Rekening
-    // Pilih semua tombol salin yang ada
+    // 4. Logika Salin untuk BANYAK No. Rekening dengan Notifikasi
     const copyButtons = document.querySelectorAll('.btn-copy');
+    const toast = document.getElementById('copy-toast'); // Ambil elemen toast
 
-    // Tambahkan event listener untuk setiap tombol
     copyButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            // Cari elemen input yang satu grup dengan tombol yang diklik
             const input = e.currentTarget.previousElementSibling;
             const rekeningNumber = input.value;
+            const bankName = e.currentTarget.dataset.bank; // Ambil nama bank
 
-            // Salin nomor rekening ke clipboard
             navigator.clipboard.writeText(rekeningNumber).then(() => {
-                // Beri feedback visual pada tombol yang diklik
-                const originalText = e.currentTarget.innerHTML;
-                e.currentTarget.innerHTML = 'Disalin!';
-                e.currentTarget.disabled = true; // Nonaktifkan tombol sementara
+                // Tampilkan notifikasi
+                toast.innerText = `No. Rekening ${bankName} berhasil disalin!`; // Ubah teks notifikasi
+                toast.classList.add('show');
 
-                // Kembalikan teks tombol setelah 2 detik
+                // Sembunyikan notifikasi setelah 3 detik
                 setTimeout(() => {
-                    e.currentTarget.innerHTML = originalText;
-                    e.currentTarget.disabled = false;
-                }, 2000);
+                    toast.classList.remove('show');
+                }, 3000);
+
             }).catch(err => {
                 console.error('Gagal menyalin: ', err);
+                // Tampilkan notifikasi error jika perlu
+                toast.innerText = 'Gagal menyalin. Coba lagi.';
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
             });
         });
     });
