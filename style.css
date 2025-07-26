@@ -262,13 +262,10 @@ section {
    ================================= */
 
 @media (max-width: 768px) {
-
-    .hero .align-items-center {
-        padding-bottom: 0; /* Hapus tinggi 100vh di mobile */
-    }
-
-    .hero .col-md-6 {
-        padding-top: 0;
+    .opening {
+        min-height: auto;     /* Hapus paksaan tinggi 100% */
+        padding-top: 20vh;    /* Beri jarak atas yang cukup */
+        padding-bottom: 20vh; /* Beri jarak bawah yang cukup */
     }
     /* Mengatur ukuran font dasar untuk semua teks paragraf di mobile */
     body {
