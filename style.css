@@ -263,7 +263,7 @@ section {
 
 @media (max-width: 768px) {
     .opening {
-        min-height: auto;     /* Hapus paksaan tinggi 100% */
+        min-height: 100vh;     /* Hapus paksaan tinggi 100% */
         padding-top: 20vh;    /* Beri jarak atas yang cukup */
         padding-bottom: 20vh; /* Beri jarak bawah yang cukup */
     }
