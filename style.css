@@ -148,6 +148,7 @@ section {
 /* Acara Section */
 #acara .col-lg-5 {
     padding-top: 5rem;
+    padding-bottom: 1rem;
 }
 #acara h2{
     font-weight: 600;
