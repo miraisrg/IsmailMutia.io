@@ -281,33 +281,36 @@
     <div id="notification-toast" class="toast"></div>
 
     <!-- Firebase SDK & Guestbook Logic -->
+    <!-- Firebase SDK & Guestbook Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         const firebaseConfig = {
-        apiKey: "AIzaSyAdE7vP17hFDYWn5NR1_BDVG2Z4PbB4j40",
-        authDomain: "undangan-efd18.firebaseapp.com",
-        projectId: "undangan-efd18",
-        storageBucket: "undangan-efd18.firebasestorage.app",
-        messagingSenderId: "573262802729",
-        appId: "1:573262802729:web:69ae4145b0ff75a6881138",
-        measurementId: "G-ZBF44GMQXJ"
+            apiKey: "AIzaSyAdE7vP17hFDYWn5NR1_BDVG2Z4PbB4j40",
+            authDomain: "undangan-efd18.firebaseapp.com",
+            projectId: "undangan-efd18",
+            storageBucket: "undangan-efd18.firebasestorage.app",
+            messagingSenderId: "573262802729",
+            appId: "1:573262802729:web:69ae4145b0ff75a6881138",
+            measurementId: "G-ZBF44GMQXJ"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
         
-        (async () => {
-            try {
-                await signInAnonymously(auth);
-                setupGuestbook();
-            } catch (error) {
-                console.error("Authentication error:", error);
-            }
-        })();
+        // Initialize authentication and setup
+        try {
+            await signInAnonymously(auth);
+            console.log("Firebase authenticated successfully");
+            setupGuestbook();
+        } catch (error) {
+            console.error("Authentication error:", error);
+            // Fallback setup even if auth fails
+            setupGuestbook();
+        }
         
         function setupGuestbook() {
             const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
@@ -317,95 +320,121 @@
 
             const guestbookForm = document.getElementById('guestbook-form');
             const guestbookContainer = document.getElementById('guestbook-container');
-            const notificationToast = document.getElementById('notification-toast');
+            const notificationToast = document.getElementById('notification-toast'); // Perbaiki nama element
             const wishesCollection = collection(db, "wishes");
 
-            const showToast = (message) => {
-                if (notificationToast) {
-                    notificationToast.innerText = message;
-                    notificationToast.classList.add('show');
-                    setTimeout(() => notificationToast.classList.remove('show'), 3000);
-                }
+            // Pastikan elements ditemukan
+            if (!guestbookForm || !guestbookContainer || !notificationToast) {
+                console.error("Required elements not found:", {
+                    form: !!guestbookForm,
+                    container: !!guestbookContainer,
+                    toast: !!notificationToast
+                });
+                return;
+            }
+
+            const showToast = (message, type = 'success') => {
+                notificationToast.innerText = message;
+                notificationToast.style.background = type === 'success' ? '#28a745' : '#dc3545';
+                notificationToast.classList.add('show');
+                setTimeout(() => notificationToast.classList.remove('show'), 3000);
             };
 
             const displayWishes = () => {
                 const q = query(wishesCollection, orderBy('timestamp', 'desc'));
                 onSnapshot(q, (snapshot) => {
-                    const previousScroll = window.scrollY;
-
-                    const tempContainer = document.createElement('div');
+                    guestbookContainer.innerHTML = '';
                     if (snapshot.empty) {
-                        tempContainer.innerHTML = '<p class="text-center">Jadilah orang pertama yang mengirim ucapan!</p>';
-                    } else {
-                        snapshot.forEach(doc => {
-                            const wish = doc.data();
-                            const wishCard = document.createElement('div');
-                            wishCard.className = 'wish-card';
-                            wishCard.innerHTML = `
-                                <button class="btn-delete" data-id="${doc.id}" title="Hapus ucapan"><i class="bi bi-trash"></i></button>
-                                <h5 class="sender-name">${wish.name}</h5>
-                                <p class="wish-text">${wish.wish}</p>
-                            `;
-                            tempContainer.appendChild(wishCard);
-                        });
+                        guestbookContainer.innerHTML = '<p class="text-center">Jadilah orang pertama yang mengirim ucapan!</p>';
+                        return;
                     }
-
-                    guestbookContainer.replaceChildren(...tempContainer.children);
-                    window.scrollTo({ top: previousScroll });
+                    
+                    snapshot.forEach(doc => {
+                        const wish = doc.data();
+                        const wishCard = document.createElement('div');
+                        wishCard.className = 'wish-card';
+                        wishCard.innerHTML = `
+                            <button class="btn-delete" data-id="${doc.id}" title="Hapus ucapan"><i class="bi bi-trash"></i></button>
+                            <h5 class="sender-name">${wish.name}</h5>
+                            <p class="wish-text">${wish.wish}</p>
+                        `;
+                        guestbookContainer.appendChild(wishCard);
+                    });
+                }, (error) => {
+                    console.error("Error fetching wishes:", error);
                 });
             };
 
-            guestbookForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+            // Perbaiki form submit handler
+            guestbookForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Mencegah form reload halaman
+                e.stopPropagation(); // Mencegah event bubbling
+                
                 const nameInput = document.getElementById('nama');
                 const wishInput = document.getElementById('ucapan');
                 const submitButton = guestbookForm.querySelector('button[type="submit"]');
                 const name = nameInput.value.trim();
                 const wish = wishInput.value.trim();
 
-                if (!name || !wish) return;
+                console.log("Form submitted:", { name, wish }); // Debug log
 
+                if (!name || !wish) {
+                    showToast('Nama dan ucapan harus diisi!', 'error');
+                    return false; // Pastikan tidak ada submit
+                }
+
+                // Ubah tombol ke loading state
+                const originalHTML = submitButton.innerHTML;
                 submitButton.disabled = true;
                 submitButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengirim...`;
                 
-                try {
-                    await addDoc(wishesCollection, {
-                        name: name,
-                        wish: wish,
-                        timestamp: new Date()
-                    });
-                    
-                    nameInput.value = '';
-                    wishInput.value = '';
-                    showToast('Ucapan Anda berhasil terkirim!');
-
-                    // Scroll ke form ucapan setelah submit
-                    guestbookForm.scrollIntoView({ behavior: 'smooth' });
-
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                    showToast('Gagal mengirim ucapan. Coba lagi.');
-                } finally {
+                // Reset button function
+                const resetButton = () => {
                     submitButton.disabled = false;
                     submitButton.innerHTML = '<i class="bi bi-send-fill"></i> Kirim Ucapan';
-                }
+                };
+
+                // Add to Firestore
+                addDoc(wishesCollection, {
+                    name: name,
+                    wish: wish,
+                    timestamp: new Date()
+                })
+                .then(() => {
+                    console.log("Document added successfully");
+                    nameInput.value = '';
+                    wishInput.value = '';
+                    showToast('Ucapan Anda berhasil terkirim!', 'success');
+                    resetButton();
+                })
+                .catch((error) => {
+                    console.error("Error adding document:", error);
+                    showToast('Gagal mengirim ucapan. Coba lagi.', 'error');
+                    resetButton();
+                });
+
+                return false; // Pastikan form tidak submit secara normal
             });
             
-            guestbookContainer.addEventListener('click', async (e) => {
+            // Delete handler
+            guestbookContainer.addEventListener('click', (e) => {
                 const deleteButton = e.target.closest('.btn-delete');
-                if (deleteButton) {
+                if (deleteButton && isAdmin) {
                     const docId = deleteButton.dataset.id;
-                    try {
-                        await deleteDoc(doc(db, "wishes", docId));
-                        showToast('Ucapan berhasil dihapus.');
-                    } catch (error) {
-                        console.error("Error removing document: ", error);
-                        showToast('Gagal menghapus ucapan.');
-                    }
+                    deleteDoc(doc(db, "wishes", docId))
+                    .then(() => {
+                        showToast('Ucapan berhasil dihapus.', 'success');
+                    })
+                    .catch((error) => {
+                        console.error("Error removing document:", error);
+                        showToast('Gagal menghapus ucapan.', 'error');
+                    });
                 }
             });
 
+            // Initialize display
             displayWishes();
+            console.log("Guestbook setup completed");
         }
     </script>
 
