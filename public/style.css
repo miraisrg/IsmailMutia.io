@@ -130,6 +130,7 @@ section {
 }
 .hero .col-md-6 {
     padding-top: 0; /* Hapus padding atas untuk carousel */
+    text-align: center;
 }
 
 /* Quran Section */
