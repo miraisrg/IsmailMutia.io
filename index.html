@@ -331,22 +331,27 @@
             const displayWishes = () => {
                 const q = query(wishesCollection, orderBy('timestamp', 'desc'));
                 onSnapshot(q, (snapshot) => {
-                    guestbookContainer.innerHTML = '';
+                    const previousScroll = window.scrollY;
+
+                    const tempContainer = document.createElement('div');
                     if (snapshot.empty) {
-                        guestbookContainer.innerHTML = '<p class="text-center">Jadilah orang pertama yang mengirim ucapan!</p>';
-                        return;
+                        tempContainer.innerHTML = '<p class="text-center">Jadilah orang pertama yang mengirim ucapan!</p>';
+                    } else {
+                        snapshot.forEach(doc => {
+                            const wish = doc.data();
+                            const wishCard = document.createElement('div');
+                            wishCard.className = 'wish-card';
+                            wishCard.innerHTML = `
+                                <button class="btn-delete" data-id="${doc.id}" title="Hapus ucapan"><i class="bi bi-trash"></i></button>
+                                <h5 class="sender-name">${wish.name}</h5>
+                                <p class="wish-text">${wish.wish}</p>
+                            `;
+                            tempContainer.appendChild(wishCard);
+                        });
                     }
-                    snapshot.forEach(doc => {
-                        const wish = doc.data();
-                        const wishCard = document.createElement('div');
-                        wishCard.className = 'wish-card';
-                        wishCard.innerHTML = `
-                            <button class="btn-delete" data-id="${doc.id}" title="Hapus ucapan"><i class="bi bi-trash"></i></button>
-                            <h5 class="sender-name">${wish.name}</h5>
-                            <p class="wish-text">${wish.wish}</p>
-                        `;
-                        guestbookContainer.appendChild(wishCard);
-                    });
+
+                    guestbookContainer.replaceChildren(...tempContainer.children);
+                    window.scrollTo({ top: previousScroll });
                 });
             };
 
@@ -374,6 +379,9 @@
                     wishInput.value = '';
                     showToast('Ucapan Anda berhasil terkirim!');
 
+                    // Scroll ke form ucapan setelah submit
+                    guestbookForm.scrollIntoView({ behavior: 'smooth' });
+
                 } catch (error) {
                     console.error("Error adding document: ", error);
                     showToast('Gagal mengirim ucapan. Coba lagi.');
@@ -400,6 +408,7 @@
             displayWishes();
         }
     </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
