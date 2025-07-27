@@ -128,6 +128,9 @@ section {
     margin: 0 auto;
     padding-bottom: 0;
 }
+.hero .col-md-6 {
+    padding-top: 0; /* Hapus padding atas untuk carousel */
+}
 
 /* Quran Section */
 .quran .arabic {
@@ -282,6 +285,94 @@ section {
     opacity: 1;
     bottom: 50px; /* Posisi saat muncul */
 }
+
+/* =================================
+   RSVP & Guestbook Section
+   ================================= */
+.rsvp .form-control,
+.rsvp .form-select {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+.rsvp .text-center h2{
+    font-weight: 600;
+}
+.rsvp .row h3{
+    font-weight: 600;
+}
+.rsvp .form-control::placeholder {
+    color: #ccc;
+}
+
+.rsvp .form-control:focus,
+.rsvp .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-color: var(--gold-color);
+    box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+}
+
+.guestbook-container {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.wish-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid var(--gold-color);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0 8px 8px 0;
+}
+
+.wish-card .sender-name {
+    font-weight: 600;
+    color: var(--gold-color);
+    margin-bottom: 0.5rem;
+}
+
+.wish-card .wish-text {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 0;
+}
+
+/* =================================
+   Admin Delete Button
+   ================================= */
+
+.wish-card {
+    position: relative; /* Diperlukan untuk memosisikan tombol hapus */
+}
+
+.btn-delete {
+    display: none; /* Sembunyikan tombol hapus secara default */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid rgba(255, 0, 0, 0.4);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    line-height: 1;
+    padding: 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: rgba(255, 0, 0, 0.4);
+}
+
+/* Tampilkan tombol hapus jika mode admin aktif */
+.admin-mode .btn-delete {
+    display: block;
+}
+
 /* =================================
    5. TAMPILAN RESPONSIVE (MOBILE)
    ================================= */
@@ -304,16 +395,16 @@ section {
 
     /* Memperkecil semua ukuran heading */
     h2, .opening-title {
-        font-size: 1.5rem; /* Memperkecil ukuran judul utama section */
+        font-size: 1.8rem; /* Memperkecil ukuran judul utama section */
     }
     h3 {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
     h4 {
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
     h5 {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 
     /* Penyesuaian khusus untuk elemen dengan teks sangat besar */
@@ -321,10 +412,10 @@ section {
         font-size: 1.5rem; /* Memperkecil nama tamu */
     }
     .hero h2 {
-        font-size: 2rem; /* Memperkecil judul di Hero Section */
+        font-size: 3rem; /* Memperkecil judul di Hero Section */
     }
     #clock span:first-child {
-        font-size: 2.5rem; /* Memperkecil angka countdown */
+        font-size: 3rem; /* Memperkecil angka countdown */
     }
     .quran .arabic {
         font-size: 1.5rem; /* Memperkecil tulisan Arab */
@@ -335,6 +426,9 @@ section {
         text-align: center;
         padding-left: 0;
         margin-top: 2rem;
+    }
+    .hero .row{
+        min-height: 90vh !important; /* Tetap menjaga tinggi minimal */
     }
     .story .col-md-6 {
         text-align: center;
