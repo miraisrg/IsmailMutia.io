@@ -1,0 +1,299 @@
+/* Import Font */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary-font: 'Poppins', sans-serif;
+    --secondary-font: 'Poppins', sans-serif;
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --gold-color: #D4AF37; /* Warna emas untuk aksen */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--secondary-font);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--primary-font);
+    color: white;
+}
+
+/* =================================
+   1. STRUKTUR UTAMA & BACKGROUND
+   ================================= */
+
+section {
+    padding: 6rem 0;
+}
+
+/* Pengaturan satu background utama untuk seluruh halaman */
+#main-content {
+    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('img/berdua_5.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Membuat semua section di dalamnya menjadi transparan */
+.hero,
+.quran,
+.mempelai,
+.acara,
+#countdown, /* #countdown juga dibuat transparan untuk konsistensi */
+.story,
+.gallery,
+.gift
+{
+    background: transparent !important;
+}
+
+
+/* =================================
+   2. HALAMAN PEMBUKA (OPENING)
+   ================================= */
+
+.opening {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    min-height: 100vh;
+    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('img/berdua_5.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.opening .text-center {
+    width: 100%;
+}
+
+.opening-title {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    font-family: var(--primary-font);
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: white;
+    line-height: 1.2;
+}
+
+.opening-title::first-line {
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: var(--secondary-font);
+}
+
+.opening h4 {
+    font-size: 1rem;
+}
+
+.opening #guest-name {
+    font-size: 2rem;
+    color: var(--gold-color);
+    font-weight: 600;
+}
+
+.opening p {
+    font-size: 0.9rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+
+/* =================================
+   3. SECTION CONTENT
+   ================================= */
+
+/* Hero Section */
+.hero {
+    padding: 0; /* Hero tidak perlu padding atas/bawah karena sudah 100vh */
+}
+.hero-text {
+    text-align: left;
+    padding-left: 2rem;
+}
+.hero h2 { font-size: 3rem; line-height: 1; font-weight: 600;}
+.hero h4 { font-size: 1.5rem; }
+.hero p { font-size: 1.2rem; }
+#hero-carousel img {
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+    max-width: 90%; /* Diperkecil sesuai permintaan terakhir */
+    margin: 0 auto;
+}
+
+/* Quran Section */
+.quran .arabic {
+    font-size: 2rem;
+    color: var(--gold-color);
+}
+
+/* Mempelai Section */
+.mempelai h3 {
+    color: var(--gold-color);
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+/* Acara Section */
+#acara .col-lg-5 {
+    padding-top: 5rem;
+}
+#acara h2{
+    font-weight: 600;
+}
+#acara .img-fluid.shadow {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+.card-acara {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--gold-color);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(10px);
+}
+.card-acara h5 {
+    color: var(--gold-color);
+    font-size: 1rem; /* Sedikit diperbesar agar terbaca */
+}
+.card-acara p {
+    font-size: 0.9rem; /* Sedikit diperbesar agar terbaca */
+}
+.card-acara i {
+    color: var(--gold-color);
+    margin-right: 0.5rem;
+}
+
+/* Countdown Section */
+#countdown .container {
+    background-color: rgba(34, 34, 34, 0.7);
+    border-radius: 15px;
+    padding: 3rem 2rem; /* Diberi padding agar lebih rapi */
+}
+#clock div {
+    text-align: center;
+}
+#clock span:first-child {
+    font-size: 4rem;
+    font-weight: bold;
+    display: block;
+    line-height: 1;
+    color: var(--gold-color);
+}
+
+/* Story Section */
+.story h5 {
+    color: var(--gold-color);
+    margin-top: 1rem;
+}
+.story .col-md-6 h2{
+    font-weight: 600;
+}
+
+/* Gallery Section */
+#gallery .img-fluid {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;
+}
+#gallery .container h2{
+    font-weight: 600;
+    padding-bottom: 1rem;
+}
+.gift .container h2 {
+    font-weight: 600;
+    padding-bottom: 1rem;
+}
+/* Modal untuk Gift */
+.rekening-item .form-control {
+    background-color: #f8f9fa;
+    border-right: none;
+}
+.rekening-item .form-control:focus {
+    box-shadow: none;
+}
+
+/* =================================
+   4. EFEK & KONTROL
+   ================================= */
+
+/* Kontrol Audio */
+.audio-control {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* Efek Transisi Fade-in */
+.fade-in-element {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+.fade-in-element.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =================================
+   5. TAMPILAN RESPONSIVE (MOBILE)
+   ================================= */
+
+@media (max-width: 768px) {
+    /* Mengatur ukuran font dasar untuk semua teks paragraf di mobile */
+    body {
+        font-size: 14px;
+    }
+
+    /* Mengatur ulang padding section agar tidak terlalu besar di mobile */
+    section {
+        padding: 4rem 0;
+    }
+
+    /* Memperkecil semua ukuran heading */
+    h2, .opening-title {
+        font-size: 2rem; /* Memperkecil ukuran judul utama section */
+    }
+    h3 {
+        font-size: 1.5rem;
+    }
+    h4 {
+        font-size: 1.1rem;
+    }
+    h5 {
+        font-size: 1rem;
+    }
+
+    /* Penyesuaian khusus untuk elemen dengan teks sangat besar */
+    .opening #guest-name {
+        font-size: 1.8rem; /* Memperkecil nama tamu */
+    }
+    .hero h2 {
+        font-size: 2.5rem; /* Memperkecil judul di Hero Section */
+    }
+    #clock span:first-child {
+        font-size: 2.5rem; /* Memperkecil angka countdown */
+    }
+    .quran .arabic {
+        font-size: 1.5rem; /* Memperkecil tulisan Arab */
+    }
+
+    /* Perbaikan tata letak yang sudah ada */
+    .hero-text {
+        text-align: center;
+        padding-left: 0;
+        margin-top: 2rem;
+    }
+    .story .col-md-6 {
+        text-align: center;
+    }
+    #gallery .img-fluid {
+        height: 30vw;
+    }
+}
